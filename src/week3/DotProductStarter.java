@@ -2,7 +2,7 @@ package week3;
 
 import java.util.*;
 
-public class DotProduct {
+public class DotProductStarter {
     private static long maxDotProduct(int[] a, int[] b) {
         //write your code here
         long result = 0;

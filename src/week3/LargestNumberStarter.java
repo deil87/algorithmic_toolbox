@@ -2,7 +2,7 @@ package week3;
 
 import java.util.*;
 
-public class LargestNumber {
+public class LargestNumberStarter {
     private static String largestNumber(String[] a) {
         //write your code here
         String result = "";

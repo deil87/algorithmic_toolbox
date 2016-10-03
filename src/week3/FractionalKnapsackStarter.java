@@ -2,7 +2,7 @@ package week3;
 
 import java.util.Scanner;
 
-public class FractionalKnapsack {
+public class FractionalKnapsackStarter {
     private static double getOptimalValue(int capacity, int[] values, int[] weights) {
         double value = 0;
         //write your code here
