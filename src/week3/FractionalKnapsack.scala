@@ -1,7 +1,6 @@
-import java.util.Scanner
+package week3
 
-import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
+import java.util.Scanner
 
 /**
   * A thief finds much more loot than his bag can fit.
