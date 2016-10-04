@@ -2,6 +2,7 @@ import java.util.Scanner
 
 import scala.annotation.{switch, tailrec}
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
 /**
@@ -11,53 +12,63 @@ import scala.util.Random
 object MajorityElement {
   def main(args: Array[String]): Unit = {
 
-        val s = new Scanner(System.in)
+    val s = new Scanner(System.in)
 
-      val amountOfNumbers = s.nextInt()
-      val numbers: Array[Int] = new Array[Int](amountOfNumbers)
-      var i: Int = 0
+//    for (i <- 0 to 1000000) {
+    val amountOfNumbers = s.nextInt()
+    val numbers: ListBuffer[Int] = new ListBuffer[Int]()// Stream.continually(Random.nextInt(10)).take(amountOfNumbers).toArray//new Array[Int](amountOfNumbers)
+    var i: Int = 0
 
-      while (i < amountOfNumbers) {
+    while (i < amountOfNumbers) {
       {
-        numbers(i) = s.nextInt
+        numbers += s.nextInt
         i += 1
       }
     }
 
-      def isMajority(numbers: Array[Int], element: Int, from: Int, to: Int): Int = {
-        var count = 0
-        var a = from
-        while (a < to) {
-          if (numbers(a) == element) count += 1
-          a += 1
-        }
-        count
+    def isMajority(numbers: List[Int], element: Int, from: Int, to: Int): Int = {
+      var count = 0
+      var a = from
+      while (a < to) {
+        if (numbers(a) == element) count += 1
+        a += 1
       }
+      count
+    }
 
-      @tailrec def isHasMajorityElement(numbers: Array[Int], numbersSize: Int, isOdd: Int, distinct: Array[Int], distSize: Int, current: Int): Int = {
-        if (current > distSize)
-          0
-        else {
-          val middle: Int = numbersSize / 2
-          lazy val currentDistinct: Int = distinct(current)
-          lazy val left: Int = isMajority(numbers, currentDistinct, 0, middle)
-          lazy val right: Int = isMajority(numbers, currentDistinct, numbersSize - middle - isOdd, numbersSize)
-          val isCurrentElementMajority =
-            if (right > middle || left > middle || left + right > middle)
-              true
-            else false
+    @tailrec def isHasMajorityElement(numbers: List[Int], numbersSize: Int, isOdd: Int, distinct: List[Int], distSize: Int): Int = {
+      if (distSize <= 0)
+        0
+      else {
+        val middle: Int = numbersSize / 2
+        lazy val currentDistinct: Int = distinct.head
+        lazy val left: Int = isMajority(numbers, currentDistinct, 0, middle)
+        lazy val right: Int = isMajority(numbers, currentDistinct, numbersSize - middle - isOdd, numbersSize)
+        val isCurrentElementMajority =
+          if (right > middle || left > middle || left + right > middle)
+            true
+          else false
 
-           if(isCurrentElementMajority)
-             1
-           else
-            isHasMajorityElement(numbers, numbersSize, isOdd, distinct, distSize, current + 1)
-          }
-
+        if (isCurrentElementMajority)
+          1
+        else
+          isHasMajorityElement(numbers, numbersSize, isOdd, distinct.drop(1), distSize - 1)
       }
-
-          val distinctNumbers: Array[Int] = numbers.distinct
-          println(isHasMajorityElement(numbers, amountOfNumbers, amountOfNumbers % 2, distinctNumbers, distinctNumbers.length - 1, 0))
 
     }
+
+    val allNumbers = numbers.toList
+    val distinctNumbers = allNumbers.distinct
+    println(isHasMajorityElement(allNumbers, amountOfNumbers, amountOfNumbers % 2, distinctNumbers, distinctNumbers.length))
+
+    /*val counters = mutable.Map.empty[Int, Int]
+    numbers.foreach { n =>
+      counters(n) = counters.get(n).map(_ + 1).getOrElse(1)
+    }
+    val isMajorityWithMap = counters.find { case (k, v) => v > amountOfNumbers / 2 }
+
+    if (isMajorityWithMap.map(_ => 1).getOrElse(0) != isHasMajorityElement(numbers, amountOfNumbers, amountOfNumbers % 2, distinctNumbers, distinctNumbers.length - 1))
+      println(numbers.mkString(","))*/
+  }
 
 }
