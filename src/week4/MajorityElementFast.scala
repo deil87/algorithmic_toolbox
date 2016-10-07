@@ -1,6 +1,8 @@
+package week4
+
 import java.util.Scanner
 
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * Majority rule is a decision rule that selects the alternative which has a majority,

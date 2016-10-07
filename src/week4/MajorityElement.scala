@@ -1,9 +1,9 @@
+package week4
+
 import java.util.Scanner
 
-import scala.annotation.{switch, tailrec}
-import scala.collection.mutable
+import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-import scala.util.Random
 
 /**
   * Majority rule is a decision rule that selects the alternative which has a majority,
