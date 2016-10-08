@@ -1,5 +1,6 @@
-import java.util.Scanner
+package week5
 
+import java.util.Scanner
 
 import scala.collection.mutable
 
@@ -10,15 +11,12 @@ import scala.collection.mutable
   * minimum number of operations needed to obtain the number n starting from the number 1
   */
 
-object PrimitiveCalculator {
+object PrimitiveCalculatorFastest {
 
-  val memo = mutable.Map.empty[Int, Int]
-  memo(1) = 0
+  def findMinimumOfOperationsFor(memo: Array[Int], numberTarget: Int): Int = {
 
-  def findMinimumOfOperationsFor(numberTarget: Int): Int = {
-
-    for( number <- 1 to numberTarget) {
-      memo.getOrElseUpdate(number, {
+    for( number <- 2 to numberTarget) {
+      memo(number) = {
         val nBy3Operation = if (number % 3 == 0) 1 + memo(number / 3) else Int.MaxValue
         val nBy2Operation =  if (number % 2 == 0) 1 + memo(number / 2) else Int.MaxValue
         val nMinusOneOperation = 1 + memo(number - 1)
@@ -26,7 +24,7 @@ object PrimitiveCalculator {
         val minPossible = Math.min(Math.min(nBy3Operation,nBy2Operation),nMinusOneOperation)
 
         minPossible
-      })
+      }
     }
     memo(numberTarget)
   }
@@ -39,8 +37,10 @@ object PrimitiveCalculator {
 
       val targetNumber = s.nextInt
 //    BenchmarkHelper.time("main"){
+      val memo = new Array[Int](targetNumber + 1)
+      memo(1) = 0
 
-      val amountOfOperations: Int = findMinimumOfOperationsFor(targetNumber)
+      val amountOfOperations: Int = findMinimumOfOperationsFor(memo, targetNumber)
 
       println(amountOfOperations)
       var i = targetNumber
@@ -51,9 +51,9 @@ object PrimitiveCalculator {
           lazy val next3: Int = i / 3
           lazy val next2: Int = i / 2
           lazy val next1: Int = i - 1
-          val for3 = if (i % 3 == 0) memo.getOrElse(next3, throw new IllegalStateException("should be here")) else Int.MaxValue
-          val for2 = if (i % 2 == 0) memo.getOrElse(next2, throw new IllegalStateException("should be here")) else Int.MaxValue
-          val for1 = memo.getOrElse(next1, throw new IllegalStateException("should be here"))
+          val for3 = if (i % 3 == 0) memo(next3) else Int.MaxValue
+          val for2 = if (i % 2 == 0) memo(next2) else Int.MaxValue
+          val for1 = memo(next1)
           val variants = List((for3, 1), (for2, 2), (for1, 3))
           val min = variants.sortWith(_._1 < _._1).head
           if (min._2 == 1) {
@@ -71,7 +71,6 @@ object PrimitiveCalculator {
         }
 //      }
       println(reconstraction.reverse.mkString(" "))
-    println(memo.size)
 //    }
   }
 
