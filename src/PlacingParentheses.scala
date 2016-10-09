@@ -6,7 +6,7 @@ import java.util.Scanner
 
 object PlacingParentheses {
 
-  def calculateMaxValue(expression: String, minMtx: Array[Array[Int]], maxMtx: Array[Array[Int]]): Int = {
+  def calculateMaxValue(expression: String, minMtx: Array[Array[BigInt]], maxMtx: Array[Array[BigInt]]): BigInt = {
 
     val length1: Int = expression.length
     val amountOfNumbers: Int = length1 / 2 + 1
@@ -38,9 +38,9 @@ object PlacingParentheses {
     maxMtx(0)(amountOfNumbers - 1)
   }
 
-  def minAndMax(i: Int, j: Int, expression: String, minMtx: Array[Array[Int]], maxMtx: Array[Array[Int]]): (Int, Int) = {
-    var min = Int.MaxValue
-    var max = Int.MinValue
+  def minAndMax(i: Int, j: Int, expression: String, minMtx: Array[Array[BigInt]], maxMtx: Array[Array[BigInt]]): (BigInt, BigInt) = {
+    var min = BigInt(Int.MaxValue)
+    var max = BigInt(Int.MinValue)
     for (k <- i until j) {
       val lastOperationChar: Char = expression(2* (k + 1) - 1)
       lazy val a = op(lastOperationChar)(maxMtx(i)(k) , maxMtx(k + 1)(j) )
@@ -49,6 +49,7 @@ object PlacingParentheses {
       lazy val d = op(lastOperationChar)(minMtx(i)(k) , minMtx(k + 1)(j) )
 
       val variants = List(a, b, c, d)
+      val e = BigInt(5) > BigInt(3)
       val maximum = (max :: variants).sortWith(_ > _).head
       val minimum = (min :: variants).sortWith(_ < _).head
       if( maximum > max) max = maximum
@@ -57,7 +58,7 @@ object PlacingParentheses {
     (min, max)
   }
 
-  def op(strOp: Char)(l: Int, r: Int) = strOp match {
+  def op(strOp: Char)(l: BigInt, r: BigInt) = strOp match {
     case '+' =>  l + r
     case '-' =>  l - r
     case '*' =>  l * r
@@ -70,8 +71,8 @@ object PlacingParentheses {
     val str1 = s.next()
 
 
-    val minMtx: Array[Array[Int]] =  Array.ofDim[Int]( str1.length / 2 + 1, str1.length / 2 + 1)
-    val maxMtx: Array[Array[Int]] =  Array.ofDim[Int]( str1.length / 2 + 1, str1.length / 2 + 1)
+    val minMtx: Array[Array[BigInt]] =  Array.ofDim[BigInt]( str1.length / 2 + 1, str1.length / 2 + 1)
+    val maxMtx: Array[Array[BigInt]] =  Array.ofDim[BigInt]( str1.length / 2 + 1, str1.length / 2 + 1)
 
     println(calculateMaxValue(str1, minMtx, maxMtx))
 
